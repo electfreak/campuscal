@@ -1,0 +1,16 @@
+{
+  "name": "campuscal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ics": "^3.0.1",
+    "puppeteer": "^19.6.3"
+  }
+}
