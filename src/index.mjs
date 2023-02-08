@@ -1,6 +1,8 @@
 import scheduleParser from './scheduleParser.mjs';
+import icsMaker from './icsMaker.mjs';
 
 (async () => {
-  const s = await scheduleParser("aiusufov", "");
-  console.log(s);
+  const schedule = await scheduleParser("aiusufov", "");
+  console.log(JSON.stringify(schedule));
+  icsMaker(schedule);
 })();

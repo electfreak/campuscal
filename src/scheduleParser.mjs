@@ -1,20 +1,9 @@
 import puppeteer from 'puppeteer';
 
-let weekDaysToInt = new Map(
-  [
-    ['Monday', 0],
-    ['Tuesday', 1],
-    ['Wednesday', 2],
-    ['Thursday', 3],
-    ['Friday', 4],
-    ['Saturday', 5],
-    ['Sunday', 6]
-  ]
-);
-
 export default async (login, passwd) => {
   const browser = await puppeteer.launch({
-    headless: true
+    headless: true,
+    devtools: false
   });
   const page = await browser.newPage();
 
@@ -48,6 +37,7 @@ export default async (login, passwd) => {
 
   await page.waitForSelector(".appointment");
   const schedule = await page.evaluate(() => {
+    // debugger;
     const startDate = document.querySelector("option[selected]")
       .textContent
       .trim()
@@ -55,18 +45,33 @@ export default async (login, passwd) => {
       .toString()
       .split('.')
       .map(Number)
-      .reverse()
-    ;
+      .reverse();
+
+    const calcDuration = time => {
+      // debugger;
+      const [start, end] = time.split(" - ").map(i => i.match(/\d\d/g));
+      const startMins = Number(start[0]) * 60 + Number(start[1]);
+      const endMins = Number(end[0]) * 60 + Number(end[1]);
+      return {
+        hours: Math.floor((endMins - startMins) / 60),
+        minutes: (endMins - startMins) % 60
+      };
+    };
 
     return {
       startDate,
-      events: [...document.querySelectorAll(".appointment")].map(i => ({
-        
-        title: i.querySelector('.link').getAttribute("title"),
-        time: i.querySelector('.timePeriod').childNodes[0].textContent.trim().split(' - '),
-        weeekDay: i.getAttribute("abbr").split(" ")[0],
-        
-      }))
+      events: [...document.querySelectorAll(".appointment")].map(i => {
+        const timePeriod = i.querySelector('.timePeriod').textContent.trim();
+
+        return {
+          title: i.querySelector('.link').getAttribute("title"),
+          weekDay: i.getAttribute("abbr").split(" ")[0],
+          duration: calcDuration(timePeriod.match(/\d\d:\d\d - \d\d:\d\d/).toString()),
+          startTime: timePeriod.match(/\d\d:\d\d/).toString().split(':').map(Number),
+          location: i.querySelector("a.arrow")?.textContent.trim(),
+        }
+      }),
+
     };
 
   });
