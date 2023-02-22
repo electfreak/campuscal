@@ -50,6 +50,7 @@ const getEventsFromSelectedWeek = async (page) => {
 
 export default async (login, passwd, numberOfWeeks) => {
   const browser = await puppeteer.launch({
+    args: ['--no-sandbox'],
     headless: true,
     devtools: true,
     // slowMo: 250
