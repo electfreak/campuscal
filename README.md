@@ -25,5 +25,5 @@ npm start [login] [password] [number of following weeks]
 
 ```
 docker build -t campuscal .
-docker run -it -v $(pwd):/usr/src/app campuscal [login] [password] [number of following weeks]
+docker run -it --cap-add=SYS_ADMIN -v $(pwd):/usr/src/app --rm campuscal [login] [password] [number of following weeks]
 ```
