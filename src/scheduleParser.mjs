@@ -51,6 +51,7 @@ const getEventsFromSelectedWeek = async (page) => {
 export default async (login, passwd, numberOfWeeks) => {
   const browser = await puppeteer.launch({
     headless: true,
+    args: ['--no-sandbox'],
     devtools: true,
     // slowMo: 250
   });
@@ -75,7 +76,7 @@ export default async (login, passwd, numberOfWeeks) => {
   const scheduleBtn = await page.waitForSelector("text/My Course Schedule");
   await scheduleBtn.click();
 
-  const ww = await page.waitForSelector("a.img.workdays-week");
+  const ww = await page.waitForSelector("text/Week");
   await ww.click();
 
   const weeks = [];
