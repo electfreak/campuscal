@@ -80,12 +80,11 @@ export default async (login, passwd, numberOfWeeks) => {
   await ww.click();
 
   const weeks = [];
-  await page.waitForSelector(".appointment");
+  await page.waitForNetworkIdle();
   weeks.push(await getEventsFromSelectedWeek(page));
   for (let i = 0; i < numberOfWeeks; ++i) {
     await page.click(".img.img_arrowRight.skipRight");
     await page.waitForNetworkIdle();
-    await page.waitForSelector(".appointment");
 
     weeks.push(await getEventsFromSelectedWeek(page));
   }
